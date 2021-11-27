@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block body %}
+<div class="main">
+  <header>
+    <h2 class="title">SUDOKU</h2>
+    <div class="info">
+      <a href="https://github.com/zeumoweb/sudoku-game-backtracking-" target="#"
+      style="margin-right: 15px"><i class="fab fa-github" style="margin-right: 4px"></i>Source</a
+      ><a href="#"><i class="fas fa-chart-bar" style="margin-right: 4px"></i>Statistics</a>
+    </div>
+  </header>
+  <div class="content">
+    <div class="modal">GAME OVER</div>
+    <div class="game">
+      <div id="clock">
+        <div>Time</div>
+        <div>
+          <span id="minutes">00</span><span id="start">:</span
+          ><span id="seconds">00</span>
+        </div>
+      </div>
+      <div class="grid">
+        {%for row in range(board|length)%} {%for col in range(board|length)%}
+        <div class="cell" id="{{row}} {{col}}" style="font-size: smaller">
+          {{board[row][col]}}
+        </div>
+        {%endfor%} {%endfor%}
+      </div>
+      <div class="sub-grid">
+        <div class="sub-cell" id="1" style="font-size: smaller">1</div>
+        <div class="sub-cell" id="2" style="font-size: smaller">2</div>
+        <div class="sub-cell" id="3" style="font-size: smaller">3</div>
+        <div class="sub-cell" id="4" style="font-size: smaller">4</div>
+        <div class="sub-cell" id="5" style="font-size: smaller">5</div>
+        <div class="sub-cell" id="6" style="font-size: smaller">6</div>
+        <div class="sub-cell" id="7" style="font-size: smaller">7</div>
+        <div class="sub-cell" id="8" style="font-size: smaller">8</div>
+        <div class="sub-cell" id="9" style="font-size: smaller">9</div>
+      </div>
+    </div>
+    <div class="options">
+      <a href="/" class="start-game" style="display: block">New Game</a>
+      <div class="stuck">Got Stuck?</div>
+      <a class="solve" href="/" style="display: block"> Display Solution </a>
+      <div class="solve" id="solve">Visualize Solution</div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
