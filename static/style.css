@@ -164,6 +164,11 @@ a{
     text-align: center;
 }
 
+.fixed {
+    color: #031a79;
+    font-weight: bolder;
+}
+
 @media screen and (min-width: 430px) {
     .grid {
         width: 500px;
@@ -199,6 +204,21 @@ a{
         width: 500px;
         font-size: 25px;
     }
+    #complete{
+        margin-left: -200px;
+    }
+}
+
+
+#complete {
+    display: None;
+    align-items: center;
+    justify-content: center;
+}
+.congrats-logo{
+    max-width: 100%;
+    width: 50px;
+    height: auto;
 }
 /* 
 .options{

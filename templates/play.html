@@ -1,0 +1,18 @@
+{% extends "index.html"%}
+
+
+{% block grid %}
+{% for row in range(board|length) %}
+{% for col in range(board|length) %}
+{% if board[row][col] != 0 %}
+<div class="cell fixed" id="{{row}} {{col}}" style="font-size: smaller">
+  {{board[row][col]}}
+</div>
+{% else %}
+<div class="cell" id="{{row}} {{col}}" style="font-size: smaller">
+</div>
+{% endif %}
+
+{% endfor %} 
+{% endfor %}
+{% endblock %}

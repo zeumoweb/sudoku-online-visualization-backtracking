@@ -4,34 +4,41 @@ import solve
 
 app = Flask(__name__)
 
-b = [
-    [0,0,0,0,0,1,4,0,0],
-    [0,2,0,0,0,0,0,0,5],
-    [0,0,0,0,0,5,6,0,3],
-    [2,0,0,0,8,0,0,6,4],
-    [7,0,3,0,0,0,5,9,8],
-    [0,5,0,4,0,0,0,0,2],
-    [0,0,0,0,0,0,0,0,0],
-    [8,1,5,0,6,0,3,0,9],
-    [0,0,0,8,0,9,2,5,6]
-]
-# c = [1,0,0,0,0,2,4,8,0,9,4,0,8,0,0,7,5,0,0,2,0,0,0,0,0,0,0,0,0,0,0,9,6,5,0,0,3,0,7,0,8,4,6,9,1,6,0,0,0,5,0,0,0,8,0,8,0,0,6,0,0,2,0,0,0,9,4,1,5,8,7,3,4,0,3,0,0,8,0,6,5]
-# b = []
-# for i in range(9):
-#     t = []
-#     for j in range(9):
-#         t.append(c[i*9 +j])
-#     b.append(t)
-
+# b = [
+#     [0,0,0,0,0,1,4,0,0],
+#     [0,2,0,0,0,0,0,0,5],
+#     [0,0,0,0,0,5,6,0,3],
+#     [2,0,0,0,8,0,0,6,4],
+#     [7,0,3,0,0,0,5,9,8],
+#     [0,5,0,4,0,0,0,0,2],
+#     [0,0,0,0,0,0,0,0,0],
+#     [8,1,5,0,6,0,3,0,9],
+#     [0,0,0,8,0,9,2,5,6]
+# ]
+c = [1,0,0,0,0,2,4,8,0,9,4,0,8,0,0,7,5,0,0,2,0,0,0,0,0,0,0,0,0,0,0,9,6,5,0,0,3,0,7,0,8,4,6,9,1,6,0,0,0,5,0,0,0,8,0,8,0,0,6,0,0,2,0,0,0,9,4,1,5,8,7,3,4,0,3,0,0,8,0,6,5]
+b = []
+for i in range(9):
+    t = []
+    for j in range(9):
+        t.append(c[i*9 +j])
+    b.append(t)
 
 grid = game.Grid(b)
-@app.route('/', methods = ['GET', 'POST'])
+
+# Home route
+@app.route('/', methods=["POST", "GET"]) 
 def index():
+    return render_template("index.html")
+
+
+
+# Play route
+@app.route('/play', methods = ['GET', 'POST'])
+def play():
     global b, grid
 
     if request.method  == "GET":
-        print("öppps run again")
-        return render_template('index.html', board=grid.userBoard)
+        return render_template('play.html', board=grid.userBoard)
 
     if request.method == "POST":
         result = request.get_json() # take data passed by the user
@@ -40,6 +47,8 @@ def index():
             grid.updateCell(int(result["val"]), int(result["row"]), int(result["col"]), solved = valid)
             cellsStatus = grid.cellsStatus()
             listOfEditable = grid.listOfEditable()
+            # grid.displayBoard()
+            print(grid.userBoard)
             return jsonify({
                 "val": result['val'], 
                 "isValid": valid, 
@@ -58,7 +67,7 @@ def index():
                 "cellsStatus": cellsStatus,
                 "listOfEditable": listOfEditable
             })
-        # grid.displayBoard()
+        grid.displayBoard()
         fixed_value = grid.cells[result["row"]][result["col"]].value
         print('heloo..........')
         return jsonify({
@@ -70,6 +79,8 @@ def index():
             "solved": grid.solved 
             })
 
+
+# Automatic solving route
 
 @app.route('/solve', methods = ["GET", "POST"])
 def cal():

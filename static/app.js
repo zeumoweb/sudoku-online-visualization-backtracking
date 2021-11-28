@@ -1,12 +1,61 @@
 var gameover = false;
+
+cells = document.querySelectorAll("div.cell");
+subcells = document.querySelectorAll("div.sub-cell");
+
+// Check if all the cells in the board are empty and return true if they are all empty
+
+const cellAllEmpty = () => {
+  let allempty = true
+  for( let i = 1; i < cells.length; i++){
+    if (cells[i].innerHTML.trim().length != 0){
+      allempty = false
+    }
+  }
+  return allempty
+}
+
+// Manage Timer
+
+var sec = 0;
+function pad(val) {
+  return val > 9 ? val : "0" + val;
+}
+
+// startTimer()
+var timeout;
+const startTimer = () => {
+  console.log('started... 41444');
+  document.getElementById("start").innerHTML = ":";
+  timeout = setInterval(function () {
+    console.log('started...');
+    document.getElementById("seconds").innerHTML = pad(++sec % 60);
+    document.getElementById("minutes").innerHTML = pad(parseInt(sec / 60, 10));
+  }, 1000);
+};
+// Stop timer
+
+const stopTimer = () => {
+  clearInterval(timeout);
+}; 
+
+// check if the board is filled and start timer
+// if (!cellAllEmpty()){
+//   startTimer()
+// }
+// else{
+//   stopTimer()
+// }
+
+
+
+
 // Listening to key press
-addEvent(document, "keypress", function (e) {
+addEvent(document, "keydown", function (e) {
   e = e || window.event;
-  if (
-    e.key in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] &&
-    !gameover
-  ) {
-    updateCell(e.key);
+  const key = e.key !== "Backspace" && e.key !== "0" ? e.key :  e.key == "Backspace" ? "0" : null
+  if (["0","1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(key) && !gameover) {
+    updateCell(key);
   }
 });
 
@@ -58,16 +107,14 @@ const addFocus = (e) => {
   e.target.classList.add("focus");
 };
 
-cells = document.querySelectorAll("div.cell");
-subcells =  document.querySelectorAll("div.sub-cell")
 
 cells.forEach((cell) => {
   cell.addEventListener("click", addFocus);
 });
 
 subcells.forEach((cell) => {
-  cell.addEventListener("click", () => updateCell(cell.innerHTML.trim()))
-})
+  cell.addEventListener("click", () => updateCell(cell.innerHTML.trim()));
+});
 
 //  Update the grid in the backend and the frontend with the new information of a particular cell
 const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
@@ -75,7 +122,7 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
   if (gameover) {
     return null;
   }
-  const response = await fetch("http://127.0.0.1:5000", {
+  const response = await fetch("http://127.0.0.1:5000/play", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -88,47 +135,84 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      if (data["editable"] && !data["solved"]) {
-        cells[i].innerHTML = data["val"];
-        for (let i = 0; i < data["cellsStatus"].length; i++) {
-          // console.log(cells[i].innerHTML.trim(), typeof(cells[i].innerHTML.trim()));
-          if (data["cellsStatus"][i] && data["listOfEditable"][i] && cells[i].innerHTML.trim() !== "0") {
+      if (data.editable && !data.solved) {
+        cells[i].innerHTML = +data.val !== 0 ? data.val : null;
+        // Updating the background color of each cell based on the validity of their value
+        for (let i = 0; i < data.cellsStatus.length; i++) {
+          if (
+            data.cellsStatus[i] &&
+            data.listOfEditable[i] &&
+            cells[i].innerHTML.trim() !== null
+          ) {
             cells[i].classList.add("valid");
             cells[i].classList.remove("invalid");
-          } else if(!data["cellsStatus"][i] && data["listOfEditable"][i] && cells[i].innerHTML.trim() !== "0") {
+          } else if (
+            !data.cellsStatus[i] &&
+            data.listOfEditable[i] &&
+            cells[i].innerHTML.trim() !== null
+          ) {
             cells[i].classList.add("invalid");
             cells[i].classList.remove("valid");
-          }
-          else if(cells[i].innerHTML.trim() === "0"){
+          } 
+        }
+        // remove styling on all the empty cells
+        for(let i = 0; i < cells.length; i++){ 
+          if (cells[i].innerHTML.trim().length === 0){
             cells[i].classList.remove("valid");
             cells[i].classList.remove("invalid");
           }
         }
         return;
       }
-      // else if(!data["editable"] && !data["solved"]){
-      //   cells[i].innerHTML = data["val"];
-      //   return;
-      // }
-      else if ( data["solved"]){
-        try{
-          console.log(data["val"])
-          console.log(cells[i].innerHTML.trim());
-          cells[i].innerHTML = data["val"] ;
+      else if (data.solved) {
+        try {
+          cells[i].innerHTML = data.val;
           cells[i].classList.add("valid");
           cells[i].classList.remove("invalid");
+        } finally {
+          stopTimer()
+          document.getElementById('complete').style.display = "flex";
         }
-        finally{}
-        console.log("Ämazingle solved");
-        fetch("http://127.0.0.1:5000/complete")
-        gameover = true
+        // Updating the background color of each cell based on the validity of their value
+        for (let i = 0; i < data.cellsStatus.length; i++) {
+          if (
+            data.cellsStatus[i] &&
+            data.listOfEditable[i] &&
+            cells[i].innerHTML.trim() !== null
+          ) {
+            cells[i].classList.add("valid");
+            cells[i].classList.remove("invalid");
+          } else if (
+            !data.cellsStatus[i] &&
+            data.listOfEditable[i] &&
+            cells[i].innerHTML.trim() !== null
+          ) {
+            cells[i].classList.add("invalid");
+            cells[i].classList.remove("valid");
+          } 
+        }
+        stopTimer()
+        gameover = true;
+        return
       }
-      
     });
 };
 
 // Update cell with the value of the key being pressed if cell is editable
-const updateCell = async (val) => {
+const updateCell = async (val) => { 
+  let i = 0;
+  while (i < cells.length) {
+    if (cells[i].classList.contains("focus")) {
+      pos = cells[i].id.split(" ");
+      row_index = +pos[0];
+      col_index = +pos[1];
+      break;
+    }
+    i++;
+  }
+  if (i === 81){
+    return; //  stop the function if no cell is focused
+  }
 
   for (let i = 0; i < cells.length; i++) {
     cells[i].classList.remove("secondary-focus");
@@ -140,39 +224,7 @@ const updateCell = async (val) => {
     }
   }
 
-  let i = 0;
-  while (i < cells.length) {
-    if (cells[i].classList.contains("focus")) {
-      pos = cells[i].id.split(" ");
-      row_index = +pos[0];
-      col_index = +pos[1];
-      break;
-    }
-    i++;
-  }
   update(val, row_index, col_index, i);
-};
-
-// Manage Timer
-
-var sec = 0;
-function pad(val) {
-  return val > 9 ? val : "0" + val;
-}
-
-// startTimer()
-var timeout;
-const startTimer = () => {
-  document.getElementById("start").innerHTML = ":";
-  timeout = setInterval(function () {
-    document.getElementById("seconds").innerHTML = pad(++sec % 60);
-    document.getElementById("minutes").innerHTML = pad(parseInt(sec / 60, 10));
-  }, 1000);
-};
-// Stop timer
-
-const stopTimer = () => {
-  clearInterval(timeout);
 };
 
 // Animation
@@ -188,6 +240,12 @@ const getAnimation = async () => {
 
 const solve = async (e) => {
   e.preventDefault();
+  //  check if all the cells are empty, then there is nothing to solve
+  let allempty = true
+  if (cellAllEmpty()){
+    return;
+  }
+
   const animation = await getAnimation();
   if (animation == false) {
     gameover = true;
@@ -201,9 +259,10 @@ const solve = async (e) => {
     pos = row * 9 + col;
     setTimeout(await update(val, row, col, pos, addFocusOnAnimation), i * 5);
   }
-  stopTimer();
 };
 
 document.querySelector("#solve").addEventListener("click", solve);
+
+
 
 
