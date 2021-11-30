@@ -6,14 +6,14 @@ subcells = document.querySelectorAll("div.sub-cell");
 // Check if all the cells in the board are empty and return true if they are all empty
 
 const cellAllEmpty = () => {
-  let allempty = true
-  for( let i = 1; i < cells.length; i++){
-    if (cells[i].innerHTML.trim().length != 0){
-      allempty = false
+  let allempty = true;
+  for (let i = 1; i < cells.length; i++) {
+    if (cells[i].innerHTML.trim().length != 0) {
+      allempty = false;
     }
   }
-  return allempty
-}
+  return allempty;
+};
 
 // Manage Timer
 
@@ -25,10 +25,8 @@ function pad(val) {
 // startTimer()
 var timeout;
 const startTimer = () => {
-  console.log('started... 41444');
   document.getElementById("start").innerHTML = ":";
   timeout = setInterval(function () {
-    console.log('started...');
     document.getElementById("seconds").innerHTML = pad(++sec % 60);
     document.getElementById("minutes").innerHTML = pad(parseInt(sec / 60, 10));
   }, 1000);
@@ -37,24 +35,21 @@ const startTimer = () => {
 
 const stopTimer = () => {
   clearInterval(timeout);
-}; 
-
-// check if the board is filled and start timer
-// if (!cellAllEmpty()){
-//   startTimer()
-// }
-// else{
-//   stopTimer()
-// }
-
-
-
+};
 
 // Listening to key press
 addEvent(document, "keydown", function (e) {
   e = e || window.event;
-  const key = e.key !== "Backspace" && e.key !== "0" ? e.key :  e.key == "Backspace" ? "0" : null
-  if (["0","1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(key) && !gameover) {
+  const key =
+    e.key !== "Backspace" && e.key !== "0"
+      ? e.key
+      : e.key == "Backspace"
+      ? "0"
+      : null;
+  if (
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(key) &&
+    !gameover
+  ) {
     updateCell(key);
   }
 });
@@ -107,7 +102,6 @@ const addFocus = (e) => {
   e.target.classList.add("focus");
 };
 
-
 cells.forEach((cell) => {
   cell.addEventListener("click", addFocus);
 });
@@ -153,25 +147,24 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
           ) {
             cells[i].classList.add("invalid");
             cells[i].classList.remove("valid");
-          } 
+          }
         }
         // remove styling on all the empty cells
-        for(let i = 0; i < cells.length; i++){ 
-          if (cells[i].innerHTML.trim().length === 0){
+        for (let i = 0; i < cells.length; i++) {
+          if (cells[i].innerHTML.trim().length === 0) {
             cells[i].classList.remove("valid");
             cells[i].classList.remove("invalid");
           }
         }
         return;
-      }
-      else if (data.solved) {
+      } else if (data.solved) {
         try {
           cells[i].innerHTML = data.val;
           cells[i].classList.add("valid");
           cells[i].classList.remove("invalid");
         } finally {
-          stopTimer()
-          document.getElementById('complete').style.display = "flex";
+          stopTimer();
+          document.getElementById("complete").style.display = "flex";
         }
         // Updating the background color of each cell based on the validity of their value
         for (let i = 0; i < data.cellsStatus.length; i++) {
@@ -189,17 +182,17 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
           ) {
             cells[i].classList.add("invalid");
             cells[i].classList.remove("valid");
-          } 
+          }
         }
-        stopTimer()
+        stopTimer();
         gameover = true;
-        return
+        return;
       }
     });
 };
 
 // Update cell with the value of the key being pressed if cell is editable
-const updateCell = async (val) => { 
+const updateCell = async (val) => {
   let i = 0;
   while (i < cells.length) {
     if (cells[i].classList.contains("focus")) {
@@ -210,7 +203,7 @@ const updateCell = async (val) => {
     }
     i++;
   }
-  if (i === 81){
+  if (i === 81) {
     return; //  stop the function if no cell is focused
   }
 
@@ -241,8 +234,8 @@ const getAnimation = async () => {
 const solve = async (e) => {
   e.preventDefault();
   //  check if all the cells are empty, then there is nothing to solve
-  let allempty = true
-  if (cellAllEmpty()){
+  let allempty = true;
+  if (cellAllEmpty()) {
     return;
   }
 
@@ -263,6 +256,20 @@ const solve = async (e) => {
 
 document.querySelector("#solve").addEventListener("click", solve);
 
+// Difficulty Level
 
+const setLevel = async (e) => {
+  console.log(e.target.value);
+  response = await fetch("http://127.0.0.1:5000/play", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      level: e.target.value,
+    }),
+  }).then((res) => res.json())
+    .then(data => console.log(data))
+};
 
-
+document.getElementById("level").addEventListener("change", setLevel);

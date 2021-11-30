@@ -1,9 +1,7 @@
 
-
 import time
 from copy import deepcopy
-
-import solve
+from generatesudoku import Sudoku
 
 board = [
     [0,0,0,0,0,1,4,0,0],
@@ -110,7 +108,7 @@ class Grid:
         ''' check is the grid has been completely filled with correct values '''
         for i in range(9):
             for j in range(9):
-                if not solve.isValid(self.userBoard, self.userBoard[i][j], (i, j)) or self.userBoard[i][j] == 0:
+                if not Sudoku().isValid(self.userBoard, self.userBoard[i][j], (i, j)) or self.userBoard[i][j] == 0:
                     self.solved = False
                     return
         self.solved = True
@@ -120,7 +118,7 @@ class Grid:
         arr = []
         for i in range(9):
             for j in range(9):
-                arr.append(solve.isValid(self.userBoard, self.userBoard[i][j], (i, j)))
+                arr.append(Sudoku().isValid(self.userBoard, self.userBoard[i][j], (i, j)))
         return arr
 
     def listOfEditable(self):
@@ -143,12 +141,3 @@ class Grid:
             print()
 
     
-
-if __name__ == '__main__':
-    g=  Grid(board)
-    g.displayBoard()
-    print("solved???", g.solved)
-    print(g.userBoard)
-    g.updateCell(5, 0, 0)
-    print(g.userBoard)
-    print("solved???",g.solved)

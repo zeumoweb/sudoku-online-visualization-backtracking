@@ -1,3 +1,5 @@
+
+
 body {
     box-sizing: border-box;
     margin: 0px;
@@ -168,6 +170,42 @@ a{
     color: #031a79;
     font-weight: bolder;
 }
+:root {
+    --select-border: #777;
+    --select-focus: blue;
+    --select-arrow: var(--select-border);
+  }
+
+select {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+    outline: none;
+  }
+
+.select {
+    width: 115px;
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background-color: #fff;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+.options{
+    margin-top: 4px;
+}
+
 
 @media screen and (min-width: 430px) {
     .grid {
@@ -198,7 +236,7 @@ a{
     }
     .options{
         margin-left: 50px;
-        margin-top: -340px;
+        margin-top: -310px;
     }
     #clock{
         width: 500px;
@@ -206,6 +244,17 @@ a{
     }
     #complete{
         margin-left: -200px;
+    }
+    .select {
+        width: 150px;
+        border: 1px solid var(--select-border);
+        border-radius: 0.25em;
+        padding: 0.25em 0.5em;
+        font-size: 1.25rem;
+        cursor: pointer;
+        line-height: 1.1;
+        background-color: #fff;
+        background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
     }
 }
 
@@ -217,16 +266,6 @@ a{
 }
 .congrats-logo{
     max-width: 100%;
-    width: 50px;
+    width: 70px;
     height: auto;
 }
-/* 
-.options{
-    border: 2px solid black;
-}
-.game {
-    border: 2px solid red
-}
-.content{
-    border: 2px solid;
-} */
