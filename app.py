@@ -12,13 +12,17 @@ def index():
 
 grid = 0
 # Play route
-@app.route('/play', methods = ['GET', 'POST'])
-def play():
+@app.route('/play/', defaults={'level': 'Medium'}, methods = ['GET', 'POST'])
+@app.route('/play/<level>', methods = ['GET', 'POST'])
+def play(level):
     global grid
     if request.method  == "GET":
-        puzzle_board = Sudoku().genPuzzle()
+        sudoku = Sudoku()
+        sudoku.level = level
+        puzzle_board = sudoku.genPuzzle()
         grid = game.Grid(puzzle_board)
-        return render_template('play.html', board=grid.userBoard)
+        print(sudoku.level)
+        return render_template('play.html', board=grid.userBoard, level=level)
 
     if request.method == "POST":
         result = request.get_json() # take data passed by the user
@@ -57,7 +61,7 @@ def play():
                 "solved": grid.solved 
                 })
         elif "level" in result:
-            return jsonify(result ="result")
+            return jsonify(level =result["level"])
                 
     
 

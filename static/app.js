@@ -116,7 +116,7 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
   if (gameover) {
     return null;
   }
-  const response = await fetch("http://127.0.0.1:5000/play", {
+  const response = await fetch(window.location.href, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -259,8 +259,8 @@ document.querySelector("#solve").addEventListener("click", solve);
 // Difficulty Level
 
 const setLevel = async (e) => {
-  console.log(e.target.value);
-  response = await fetch("http://127.0.0.1:5000/play", {
+  url_ = "http://127.0.0.1:5000/" == window.location.href ? "http://127.0.0.1:5000/play/" : window.location.href
+  response = await fetch(url_, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -269,7 +269,10 @@ const setLevel = async (e) => {
       level: e.target.value,
     }),
   }).then((res) => res.json())
-    .then(data => console.log(data))
+    .then(data => {
+        window.location.href = `http://127.0.0.1:5000/play/${data.level}`
+        e.target.value = data.level;
+    })
 };
 
 document.getElementById("level").addEventListener("change", setLevel);
