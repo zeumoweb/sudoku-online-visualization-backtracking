@@ -115,17 +115,17 @@ class Sudoku:
         non_empty_cells = self.get_non_empty_cells(self.board)
         num_non_empty_cells = len(non_empty_cells)
         if self.level == "Beginner":
-            rounds = 20
-        elif self.level == "Easy":
             rounds = 30
+        elif self.level == "Easy":
+            rounds = 37
         elif self.level == "Medium":
-            rounds = 40
+            rounds = 43
         elif self.level == "Hard":
             rounds = 45
         elif self.level == "Difficult":
             rounds = 50
         elif self.level == "Evil":
-            rounds = 52
+            rounds = 51
         while rounds > 0 and num_non_empty_cells >= 17:
             #there should be at least 17 clues
             row,col = non_empty_cells.pop()

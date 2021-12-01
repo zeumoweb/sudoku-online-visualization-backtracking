@@ -205,6 +205,10 @@ select {
 .options{
     margin-top: 4px;
 }
+.statistics {
+    padding: 0px 30px;
+    line-height: 30px;
+}
 
 
 @media screen and (min-width: 430px) {
@@ -255,6 +259,11 @@ select {
         line-height: 1.1;
         background-color: #fff;
         background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+        
+    }
+    .statistics {
+        padding: 0px 10%;
+        line-height: 30px;
     }
 }
 

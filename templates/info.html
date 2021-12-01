@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block body %}
+<div class="main">
+  <header>
+   <a href="/"><h2 class="title">SUDOKU</h2></a>
+    <div class="info">
+      <a
+        href="https://github.com/zeumoweb/sudoku-online-visualization-backtracking"
+        target="#"
+        style="margin-right: 15px"
+        ><i class="fab fa-github" style="margin-right: 4px"></i>Source</a
+      ><a href="/info"
+        ><i class="fas fa-chart-bar" style="margin-right: 4px"></i>Info</a
+      >
+    </div>
+  </header>
+  <div class="statistics">
+    <h2>General Statistics</h2>
+    <ul class="stats">
+      <li>A total <strong>{{ hour }} hours and {{mins }} minutes</strong> was spend playing this game</li>
+      <li>This game has been played for a total ofl <u>{{total}} times</u> </li>
+      <li>The Beginner level has been played <u>{{beg}} times</u></li>
+      <li>The Easy level has been played <u>{{easy}} times</u></li>
+      <li>The Medium level has been played <u>{{med}} times</u></li>
+      <li>The Hard level has been played <u>{{hard}} times</u></li>
+      <li>The Difficult level has been played <u>{{diff}} times</u></li>
+      <li>The Evil level has been played <u>{{evil}} times</u></li>
+    </ul>
+    <h2>What is Sudoku ?</h2>
+    <p>
+      Sudoku is a popular puzzle game in which missing numbers are to
+      be filled into a 9 by 9 grid of squares which are subdivided into 3 by 3
+      boxes so that every row, every column, and every box contains the numbers
+      1 through 9. 
+
+      As mentioned above there are 3 conditions that need to be met to successfully complete the puzzle:
+      <ul>
+          <li>Complete all the rows of the puzzle with the numbers 1 to 9 without repetition</li>
+          <li>Complete all the columns of the puzzle with the numbers 1 to 9 without repetition</li>
+          <li>Complete all the 3 by 3 boxes of the puzzle with the numbers 1 to 9 without repetition</li>
+      </ul>
+    </p>
+    <p>
+        <strong>N/B: </strong><span>Sudoku is not only limited to numbers some puzzles are made up of other type of objects, but the rules remain same</span>
+        <p>Follow this link to learn more about <a href="https://sudoku.com/how-to-play/sudoku-rules-for-complete-beginners/"> Sudoku </a> </p>
+    </p>
+  </div>
+</div>
+{% endblock %}

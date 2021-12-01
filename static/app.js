@@ -3,6 +3,7 @@ var gameover = false;
 cells = document.querySelectorAll("div.cell");
 subcells = document.querySelectorAll("div.sub-cell");
 
+
 // Check if all the cells in the board are empty and return true if they are all empty
 
 const cellAllEmpty = () => {
@@ -276,3 +277,14 @@ const setLevel = async (e) => {
 };
 
 document.getElementById("level").addEventListener("change", setLevel);
+
+
+const newGame = () => {
+  if (window.location.href !== 'http://127.0.0.1:5000/'){
+    window.location.reload()
+  }
+  else{
+    window.location.href = 'http://127.0.0.1:5000/play'
+  }
+        
+}
