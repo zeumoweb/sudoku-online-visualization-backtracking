@@ -117,7 +117,7 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
   if (gameover) {
     return null;
   }
-  const response = await fetch(window.location.href, {
+  const response = await fetch(`${window.origin}/play/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
