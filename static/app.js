@@ -227,7 +227,7 @@ const updateCell = async (val) => {
 // Animation is a list of tuples that contains each value and cell the computer will fill
 // Before solving the entire game
 const getAnimation = async () => {
-  response = await fetch("/solve");
+  response = await fetch('/solve');
   animation = await response.json();
   return animation;
 };
@@ -260,7 +260,7 @@ document.querySelector("#solve").addEventListener("click", solve);
 // Difficulty Level
 
 const setLevel = async (e) => {
-  url_ = "/" == window.location.href ? "/play/" : window.location.href
+  url_ = window.location.href.indexOf('play') < 0 ? '/play/' : window.location.href
   response = await fetch(url_, {
     method: "POST",
     headers: {
@@ -280,11 +280,11 @@ document.getElementById("level").addEventListener("change", setLevel);
 
 
 const newGame = () => {
-  if (window.location.href !== '/'){
+  if (window.location.href.indexOf('play') >= 0){
     window.location.reload()
   }
   else{
-    window.location.href = '/play'
+    window.location.href = '/play/'
   }
         
 }
