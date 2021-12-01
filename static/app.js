@@ -288,3 +288,11 @@ const newGame = () => {
   }
         
 }
+
+console.log(gameover);
+if (window.location.href.indexOf('play') >= 0){
+  startTimer()
+}
+if (window.location.href.indexOf('play') >= 0 && gameover){
+  stopTimer()
+}
