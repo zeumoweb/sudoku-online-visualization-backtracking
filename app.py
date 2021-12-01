@@ -8,6 +8,10 @@ app = Flask(__name__)
 
 grid = 0
 
+import os
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+my_file = os.path.join(THIS_FOLDER, 'statistics.txt')
+print(my_file)
 # track game data
 startTime = 0
 # Home route
@@ -45,7 +49,7 @@ def play(level):
                 if grid.solved:
                     # storing the game statistics in a file
                     timeSpend = (datetime.now() - startTime).total_seconds()
-                    save_data("statistics.txt", timeSpend, level)
+                    save_data(my_file, timeSpend, level)
 
                 return jsonify({
                     "val": result['val'],
@@ -63,7 +67,8 @@ def play(level):
                 return jsonify({
                     "solved": grid.solved,
                     "cellsStatus": cellsStatus,
-                    "listOfEditable": listOfEditable
+                    "listOfEditable": listOfEditable,
+                    "val": result['val'],
                 })
             fixed_value = grid.cells[result["row"]][result["col"]].value
             return jsonify({
@@ -91,7 +96,7 @@ def visualization():
 
 @app.route("/info", methods=["POST", "GET"])
 def info():
-    with open("statistics.txt", "r") as file:
+    with open(my_file, "r") as file:
         data = file.readlines()
         hour = float(data[0].strip())//(60*60)
         mins = float(data[0].strip())//(60) - hour*60
@@ -116,11 +121,13 @@ The sixth line represent the total number of times the level Difficult has been 
 The seventh line represent the total number of times the level Evil has been played
 The eigth line represent the total number of times the game was played
 '''
-
+b, e, m, h, d, e, total, total_time = 0, 0, 0, 0, 0, 0, 0, 0
 
 def save_data(file, timeSpend=0, level="Medium"):
+    global b, e, m, h, d, e, total
     with open(file, "r") as stats:
         data = stats.readlines()
+        print(data)
         total_time = float(data[0].strip())
         b = float(data[1].strip())
         e = float(data[2].strip())
@@ -129,24 +136,26 @@ def save_data(file, timeSpend=0, level="Medium"):
         d = float(data[5].strip())
         e = float(data[6].strip())
         total = float(data[7].strip())
-    levels = [b, e, m, h, d, e, total]
-    with open(file, "w") as stats:
-        stats.write(str(timeSpend + total_time) + "\n")
+
+    with open(file, "w") as data:
+        data.write(str(timeSpend + total_time) + "\n")
         if level == "Beginner":
-            levels[0] += 1
+            b += 1
         elif level == "Easy":
-            levels[1] += 1
+            e += 1
         elif level == "Medium":
-            levels[2] += 1
+            m += 1
         elif level == "Hard":
-            levels[3] += 1
+            h += 1
         elif level == "Difficult":
-            levels[4] += 1
+            d += 1
         elif level == "Evil":
-            levels[5] += 1
-        levels[6] += 1
-        for i in levels:
-            stats.write(str(i) + "\n")
+            e += 1
+        total += 1
+        arr = [b, e, m, h, d, e, total]
+        print(arr)
+        for i in arr:
+            data.write(str(i) + '\n')
 
 
 if __name__ == "__main__":

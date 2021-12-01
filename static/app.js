@@ -117,7 +117,7 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
   if (gameover) {
     return null;
   }
-  const response = await fetch(`${window.origin}/play/`, {
+  const response = await fetch(`${window.location.href}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -166,6 +166,8 @@ const update = async (val, row_index, col_index, i = 0, fnc = () => {}) => {
         } finally {
           stopTimer();
           document.getElementById("complete").style.display = "flex";
+          document.getElementById("seconds").id = "s"
+          document.getElementById("minutes").id = "m"
         }
         // Updating the background color of each cell based on the validity of their value
         for (let i = 0; i < data.cellsStatus.length; i++) {
@@ -289,10 +291,8 @@ const newGame = () => {
         
 }
 
-console.log(gameover);
+
 if (window.location.href.indexOf('play') >= 0){
   startTimer()
 }
-if (window.location.href.indexOf('play') >= 0 && gameover){
-  stopTimer()
-}
+
