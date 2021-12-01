@@ -150,4 +150,4 @@ def save_data(file, timeSpend=0, level="Medium"):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
