@@ -10,8 +10,6 @@ grid = 0
 
 # track game data
 startTime = 0
-count_level_played = {"Beginner": 0, "Easy": 0,
-                      "Medium": 0, "Hard": 0, "Difficult": 0, "Evil": 0}
 # Home route
 
 

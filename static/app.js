@@ -227,7 +227,7 @@ const updateCell = async (val) => {
 // Animation is a list of tuples that contains each value and cell the computer will fill
 // Before solving the entire game
 const getAnimation = async () => {
-  response = await fetch("http://127.0.0.1:5000/solve");
+  response = await fetch("/solve");
   animation = await response.json();
   return animation;
 };
@@ -260,7 +260,7 @@ document.querySelector("#solve").addEventListener("click", solve);
 // Difficulty Level
 
 const setLevel = async (e) => {
-  url_ = "http://127.0.0.1:5000/" == window.location.href ? "http://127.0.0.1:5000/play/" : window.location.href
+  url_ = "/" == window.location.href ? "/play/" : window.location.href
   response = await fetch(url_, {
     method: "POST",
     headers: {
@@ -271,7 +271,7 @@ const setLevel = async (e) => {
     }),
   }).then((res) => res.json())
     .then(data => {
-        window.location.href = `http://127.0.0.1:5000/play/${data.level}`
+        window.location.href = `/play/${data.level}`
         e.target.value = data.level;
     })
 };
@@ -280,11 +280,11 @@ document.getElementById("level").addEventListener("change", setLevel);
 
 
 const newGame = () => {
-  if (window.location.href !== 'http://127.0.0.1:5000/'){
+  if (window.location.href !== '/'){
     window.location.reload()
   }
   else{
-    window.location.href = 'http://127.0.0.1:5000/play'
+    window.location.href = '/play'
   }
         
 }
