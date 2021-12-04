@@ -1,6 +1,6 @@
-[link to the deployed game](http://lekanestyve1.pythonanywhere.com/)
+
 # sudoku-online-visualization-backtracking
-Online Sudoku game that allows the user to either play the game or visualize the computer solving it.
+Online Sudoku game that allows the user to either play the game or visualize the computer solving it visit [link to the deployed game](http://lekanestyve1.pythonanywhere.com/)
 
 # Sudoku Online Game
 
